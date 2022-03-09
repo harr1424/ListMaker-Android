@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainListFragment">
+
+    <fragment
+        android:id="@+id/mainListFragment"
+        android:name="com.harr1424.listmaker.UI.MainListFragment"
+        android:label="All Lists"
+        tools:layout="@layout/fragment_main_list" >
+        <action
+            android:id="@+id/action_mainListFragment_to_detailListFragment"
+            app:destination="@id/detailListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailListFragment"
+        android:name="com.harr1424.listmaker.UI.DetailListFragment"
+        android:label="Change label dynamically"
+        tools:layout="@layout/fragment_detail_list" />
+</navigation>
