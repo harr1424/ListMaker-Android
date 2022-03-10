@@ -15,12 +15,18 @@ import kotlinx.android.synthetic.main.list_item.view.*
 class MainAdapter(private var list: LiveData<MutableList<String>?>) :
     RecyclerView.Adapter<MainAdapter.ViewHolder>() {
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
-//            init {
-//                view.setOnClickListener {
-//                    // Do something once working
-//                }
-//            }
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener,
+        View.OnLongClickListener {
+        override fun onClick(p0: View?) {
+            // Navigate to corresponding DetailList
+        }
+
+        override fun onLongClick(p0: View?): Boolean {
+            // Delete MainList item and any contained DetailList items
+            return true
+        }
+
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
