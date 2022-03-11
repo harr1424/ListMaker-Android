@@ -59,7 +59,7 @@ class MainListFragment : Fragment() {
                     "Add"
                 ) { dialog, id ->
                     val newItem = input.text.toString()
-                    viewModel.addItem(newItem)
+                    viewModel.addItemMainList(newItem)
                     adapter.notifyDataSetChanged()
                 }
                 setNegativeButton("Cancel"

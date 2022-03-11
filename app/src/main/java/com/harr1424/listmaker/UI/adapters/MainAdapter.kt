@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.list_item.view.*
 // TODO implement a ListAdapter with DiffUtil ?
 // Change back to Live Data?
 
-class MainAdapter(private var list: LiveData<MutableList<String>?>) :
+class MainAdapter(private var list: LiveData<MutableMap<String, MutableList<String>>>) :
     RecyclerView.Adapter<MainAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener,
@@ -35,7 +35,8 @@ class MainAdapter(private var list: LiveData<MutableList<String>?>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.itemView.list_item_text.text = list.value?.get(position)
+        val keyMap = list.value?.keys
+        holder.itemView.list_item_text.text = keyMap?.elementAt(position)
     }
 
     override fun getItemCount(): Int {

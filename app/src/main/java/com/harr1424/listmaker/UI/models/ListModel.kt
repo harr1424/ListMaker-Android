@@ -6,20 +6,28 @@ import androidx.lifecycle.ViewModel
 
 
 class ListViewModel : ViewModel() {
-    private val _list = MutableLiveData<MutableList<String>?>()
-    val list: LiveData<MutableList<String>?> = _list
+    private val _list = MutableLiveData<MutableMap<String, MutableList<String>>>()
+    val list: LiveData<MutableMap<String, MutableList<String>>> = _list
 
     init {
-        _list.value = ArrayList()
+        _list.value = mutableMapOf()
     }
 
-    fun addItem(item: String) {
-        _list.value?.add(item)
+    fun addItemMainList(item: String) {
+        _list.value?.put(item, mutableListOf())
         _list.value = _list.value
     }
 
-    fun deleteItem(item: String) {
+    fun deleteItemMainList(item: String) {
         _list.value?.remove(item)
         _list.value = _list.value
+    }
+
+    fun addItemDetailList(mainItem: String, detailItem: String) {
+        // if this resets the map, try using + operator as described
+        // https://kotlinlang.org/docs/map-operations.html#plus-and-minus-operators
+
+        _list.value?.put(mainItem, mutableListOf(detailItem))
+
     }
 }
