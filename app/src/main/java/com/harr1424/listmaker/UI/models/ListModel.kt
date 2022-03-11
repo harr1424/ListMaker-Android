@@ -6,28 +6,39 @@ import androidx.lifecycle.ViewModel
 
 
 class ListViewModel : ViewModel() {
-    private val _list = MutableLiveData<MutableMap<String, MutableList<String>>>()
-    val list: LiveData<MutableMap<String, MutableList<String>>> = _list
+    private val _mainList = MutableLiveData<MutableList<String>>()
+    val mainList: LiveData<MutableList<String>> = _mainList
+
+    private val _detailList = MutableLiveData<MutableList<MutableList<String>>>()
+    ;private val detailList: LiveData<MutableList<MutableList<String>>> = _detailList
 
     init {
-        _list.value = mutableMapOf()
+        _mainList.value = arrayListOf()
+        _detailList.value = arrayListOf(arrayListOf())
     }
 
     fun addItemMainList(item: String) {
-        _list.value?.put(item, mutableListOf())
-        _list.value = _list.value
+        if (_mainList.value?.contains(item) == false) {
+            _mainList.value?.add(item)
+            _mainList.value = _mainList.value
+            }
     }
 
     fun deleteItemMainList(item: String) {
-        _list.value?.remove(item)
-        _list.value = _list.value
+        _mainList.value?.remove(item)
+        _mainList.value = _mainList.value
     }
 
     fun addItemDetailList(mainItem: String, detailItem: String) {
-        // if this resets the map, try using + operator as described
-        // https://kotlinlang.org/docs/map-operations.html#plus-and-minus-operators
+        val detailIndex = _mainList.value?.indexOf(mainItem)
+        if (_detailList.value?.elementAt(detailIndex!!)?.contains(detailItem) == false) {
+            _detailList.value?.elementAt(detailIndex!!)?.add(detailItem)
+            _detailList.value = _detailList.value
+        }
+    }
 
-        _list.value?.put(mainItem, mutableListOf(detailItem))
-
+    fun deleteItemDetailList(mainItem: String, detailItem: String) {
+        val detailIndex = _mainList.value?.indexOf(mainItem)
+        _detailList.value?.elementAt(detailIndex!!)?.remove(detailItem)
     }
 }

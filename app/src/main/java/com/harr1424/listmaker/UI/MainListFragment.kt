@@ -35,12 +35,12 @@ class MainListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.list.observe(this.viewLifecycleOwner) {}
+        viewModel.mainList.observe(this.viewLifecycleOwner) {}
         // Add click listener to floating action button
         binding.fabMain.setOnClickListener {
             addListItem()
         }
-        adapter = MainAdapter(viewModel.list)
+        adapter = MainAdapter(viewModel.mainList)
         main_list_view.adapter = adapter
         main_list_view.layoutManager = LinearLayoutManager(requireContext())
         recyclerView = binding.mainListView
