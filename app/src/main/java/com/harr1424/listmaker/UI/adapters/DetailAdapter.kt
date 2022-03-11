@@ -12,17 +12,15 @@ import kotlinx.android.synthetic.main.list_item.view.*
 // TODO implement a ListAdapter with DiffUtil ?
 // Change back to Live Data?
 
-class DetailAdapter(private var list: LiveData<MutableMap<String, MutableList<String>>>, val mainItem: String) :
+class DetailAdapter(private var list: LiveData<MutableMap<String, MutableList<String>>>, mainItem: String) :
     RecyclerView.Adapter<DetailAdapter.ViewHolder>() {
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener,
-        View.OnLongClickListener {
-        override fun onClick(p0: View?) {
-            // Navigate to corresponding DetailList
-        }
+    private val detailItemsList = list.value?.get(mainItem)
+
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnLongClickListener{
 
         override fun onLongClick(p0: View?): Boolean {
-            // Delete MainList item and any contained DetailList items
+            // Delete DetailList item only
             return true
         }
 
@@ -35,12 +33,11 @@ class DetailAdapter(private var list: LiveData<MutableMap<String, MutableList<St
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val detailItemsList = list.value?.get(mainItem)
         holder.itemView.list_item_text.text = detailItemsList?.elementAt(position)
     }
 
     override fun getItemCount(): Int {
-        return list.value?.size ?: 0
+        return detailItemsList?.size ?: 0
     }
 
 }
