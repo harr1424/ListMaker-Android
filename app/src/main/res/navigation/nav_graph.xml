@@ -17,6 +17,13 @@
     <fragment
         android:id="@+id/detailListFragment"
         android:name="com.harr1424.listmaker.UI.DetailListFragment"
-        android:label="Change label dynamically"
-        tools:layout="@layout/fragment_detail_list" />
+        android:label="{itemName}"
+        tools:layout="@layout/fragment_detail_list" >
+        <argument
+            android:name="itemName"
+            app:argType="string"/>
+        <action
+            android:id="@+id/action_detailListFragment_to_mainListFragment"
+            app:destination="@id/mainListFragment" />
+    </fragment>
 </navigation>
