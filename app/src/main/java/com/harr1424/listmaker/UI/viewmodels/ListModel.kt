@@ -1,5 +1,6 @@
 package com.harr1424.listmaker
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,41 +8,41 @@ import com.harr1424.listmaker.data.Item
 
 
 class ListViewModel : ViewModel() {
-    private val _mainList = MutableLiveData<MutableList<Item>>()
-    val mainList: LiveData<MutableList<Item>> = _mainList
-
-    private val _detailList = MutableLiveData<MutableList<MutableList<Item>>>()
-    val detailList: LiveData<MutableList<MutableList<Item>>> = _detailList
+    private val _list = MutableLiveData<MutableList<Item>>()
+    val list: LiveData<MutableList<Item>> = _list
 
     init {
-        _mainList.value = arrayListOf()
-        _detailList.value = arrayListOf(arrayListOf())
+        _list.value = arrayListOf()
     }
 
     fun addItemMainList(item: Item) {
-        if (_mainList.value?.contains(item) == false) {
-            _mainList.value?.add(item)
-            _mainList.value = _mainList.value
+        if (_list.value?.contains(item) == false) {
+            _list.value?.add(item)
+            _list.value = _list.value
         }
+        Log.d("AddItem", list.value.toString())
+
     }
 
     fun deleteItemMainList(item: Item) {
-        if (_mainList.value?.contains(item) == true) {
-            _mainList.value?.remove(item)
-            _mainList.value = _mainList.value
+        if (_list.value?.contains(item) == true) {
+            _list.value?.remove(item)
+            _list.value = _list.value
         }
     }
 
-    fun addItemDetailList(mainItem: Item, detailItem: Item) {
-        val detailIndex = _mainList.value?.indexOf(mainItem)
-        if (_detailList.value?.elementAt(detailIndex!!)?.contains(detailItem) == false) {
-            _detailList.value?.elementAt(detailIndex!!)?.add(detailItem)
-            _detailList.value = _detailList.value
+    fun addItemDetailList(mainItem: Item, detailItem: String) {
+        val targetItem = list.value?.indexOf(mainItem)
+        if (targetItem != null) {
+            _list.value?.elementAt(targetItem)?.detailItems?.add(detailItem)
         }
+        Log.d("DetailListAddItem", list.value.toString())
     }
 
-    fun deleteItemDetailList(mainItem: Item, detailItem: Item) {
-        val detailIndex = _mainList.value?.indexOf(mainItem)
-        _detailList.value?.elementAt(detailIndex!!)?.remove(detailItem)
+    fun deleteItemDetailList(mainItem: Item, detailItem: String) {
+        val targetItem = list.value?.indexOf(mainItem)
+        if (targetItem != null) {
+            _list.value?.elementAt(targetItem)?.detailItems?.remove(detailItem)
+        }
     }
 }

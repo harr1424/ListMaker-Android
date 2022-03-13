@@ -35,26 +35,26 @@ class DetailListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // Add click listener to floating action button
         binding.fabMain.setOnClickListener {
-            addListItem()
+            addListItem(args.item)
         }
         val recyclerView = binding.detailListView
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        val adapter = DetailAdapter { item ->
+
+        // lambda to define longClick behavior
+        val longClick = { item: Item ->
             deleteListItem(item)
         }
-        viewModel.detailList.observe(this.viewLifecycleOwner) { items ->
+        val adapter = DetailAdapter(longClick)
+        recyclerView.adapter = adapter
+        viewModel.list.observe(this.viewLifecycleOwner) {  items ->
             items.let {
-                val list: MutableList<Item>? = viewModel.mainList.value
-                val arrayList = list?.toList()
-                val target = (Item(args.itemName))
-                val index = arrayList?.indexOf(target) // indexOf() still throws error
-                adapter.submitList(it.elementAt(index!!))
+                adapter.submitList(it)
                 adapter.notifyDataSetChanged()
             }
         }
     }
 
-    private fun addListItem() {
+    private fun addListItem(mainItem: Item) {
         val input = EditText(activity)
         input.hint = "Item name"
         input.inputType = InputType.TYPE_CLASS_TEXT
@@ -66,8 +66,10 @@ class DetailListFragment : Fragment() {
                 setPositiveButton(
                     "Add"
                 ) { dialog, id ->
-                    val newItem = Item(input.text.toString())
-                    viewModel.addItemDetailList(Item(args.itemName), newItem)
+                    val newDetailString = input.text.toString()
+                    val targetItemIndex = viewModel.list.value?.indexOf(mainItem)!!
+                    val targetItem = viewModel.list.value?.elementAt(targetItemIndex)!!
+                    viewModel.addItemDetailList(targetItem, newDetailString)
                 }
                 setNegativeButton(
                     "Cancel"
@@ -88,7 +90,7 @@ class DetailListFragment : Fragment() {
                 setPositiveButton(
                     "Yes"
                 ) { dialog, id ->
-                    viewModel.deleteItemDetailList(Item(args.itemName), item)
+                    viewModel.deleteItemDetailList(args.item, item.toString())
                 }
                 setNegativeButton(
                     "Cancel"

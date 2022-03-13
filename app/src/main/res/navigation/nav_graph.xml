@@ -20,8 +20,11 @@
         android:label="{itemName}"
         tools:layout="@layout/fragment_detail_list" >
         <argument
+            android:name="item"
+            app:argType="com.harr1424.listmaker.data.Item"/>
+        <argument
             android:name="itemName"
-            app:argType="string"/>
+            app:argType="string" />
         <action
             android:id="@+id/action_detailListFragment_to_mainListFragment"
             app:destination="@id/mainListFragment" />

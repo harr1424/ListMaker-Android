@@ -44,7 +44,7 @@ class MainListFragment : Fragment() {
         // navigate to appropriate detail list
         val click = { item: Item ->
             val action =
-                MainListFragmentDirections.actionMainListFragmentToDetailListFragment(item.itemName)
+                MainListFragmentDirections.actionMainListFragmentToDetailListFragment(item, item.itemName)
             findNavController().navigate(action)
         }
 
@@ -57,7 +57,7 @@ class MainListFragment : Fragment() {
         // MainAdapter takes params onClickListener and onLongClickListener
         val adapter = MainAdapter(click, longClick)
         recyclerView.adapter = adapter
-        viewModel.mainList.observe(this.viewLifecycleOwner) { items ->
+        viewModel.list.observe(this.viewLifecycleOwner) { items ->
             items.let {
                 adapter.submitList(it)
                 adapter.notifyDataSetChanged()
@@ -77,7 +77,7 @@ class MainListFragment : Fragment() {
                 setPositiveButton(
                     "Add"
                 ) { dialog, id ->
-                    val newItem = Item(input.text.toString())
+                    val newItem = Item(input.text.toString(), mutableListOf())
                     viewModel.addItemMainList(newItem)
                 }
                 setNegativeButton(
