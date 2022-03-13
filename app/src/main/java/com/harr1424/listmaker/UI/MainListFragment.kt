@@ -11,13 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.harr1424.listmaker.ListViewModel
 import com.harr1424.listmaker.UI.adapters.MainAdapter
 import com.harr1424.listmaker.data.Item
 import com.harr1424.listmaker.databinding.FragmentMainListBinding
-import kotlinx.android.synthetic.main.fragment_main_list.*
-import java.lang.reflect.Constructor
 
 
 class MainListFragment : Fragment() {
@@ -43,21 +40,25 @@ class MainListFragment : Fragment() {
         val recyclerView = binding.mainListView
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-
-        val click =  { item: Item ->
-            val action = MainListFragmentDirections.actionMainListFragmentToDetailListFragment(item.itemName)
+        // lambda for click behavior
+        // navigate to appropriate detail list
+        val click = { item: Item ->
+            val action =
+                MainListFragmentDirections.actionMainListFragmentToDetailListFragment(item.itemName)
             findNavController().navigate(action)
         }
 
-        val longClick = {
-            item: Item ->
+        // lambda for long click behavior
+        // delete longclicked item
+        val longClick = { item: Item ->
             deleteListItem(item)
         }
 
+        // MainAdapter takes params onClickListener and onLongClickListener
         val adapter = MainAdapter(click, longClick)
         recyclerView.adapter = adapter
-        viewModel.mainList.observe(this.viewLifecycleOwner) {
-            items -> items.let {
+        viewModel.mainList.observe(this.viewLifecycleOwner) { items ->
+            items.let {
                 adapter.submitList(it)
                 adapter.notifyDataSetChanged()
             }
@@ -66,7 +67,7 @@ class MainListFragment : Fragment() {
 
     private fun addListItem() {
         val input = EditText(activity)
-        input.setHint("Item name")
+        input.hint = "Item name"
         input.inputType = InputType.TYPE_CLASS_TEXT
         activity?.let {
             val builder = AlertDialog.Builder(activity)
@@ -79,7 +80,8 @@ class MainListFragment : Fragment() {
                     val newItem = Item(input.text.toString())
                     viewModel.addItemMainList(newItem)
                 }
-                setNegativeButton("Cancel"
+                setNegativeButton(
+                    "Cancel"
                 ) { dialog, id ->
                     dialog.cancel()
                 }
@@ -111,4 +113,4 @@ class MainListFragment : Fragment() {
         return true
     }
 
-    }
+}

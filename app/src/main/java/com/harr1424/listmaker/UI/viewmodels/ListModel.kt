@@ -11,7 +11,7 @@ class ListViewModel : ViewModel() {
     val mainList: LiveData<MutableList<Item>> = _mainList
 
     private val _detailList = MutableLiveData<MutableList<MutableList<Item>>>()
-    ;private val detailList: LiveData<MutableList<MutableList<Item>>> = _detailList
+    val detailList: LiveData<MutableList<MutableList<Item>>> = _detailList
 
     init {
         _mainList.value = arrayListOf()
@@ -22,7 +22,7 @@ class ListViewModel : ViewModel() {
         if (_mainList.value?.contains(item) == false) {
             _mainList.value?.add(item)
             _mainList.value = _mainList.value
-            }
+        }
     }
 
     fun deleteItemMainList(item: Item) {

@@ -1,42 +1,51 @@
 package com.harr1424.listmaker.UI.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.LiveData
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.harr1424.listmaker.R
-import kotlinx.android.synthetic.main.list_item.view.*
+import com.harr1424.listmaker.data.Item
+import com.harr1424.listmaker.databinding.ListItemBinding
 
 
-// TODO implement a ListAdapter with DiffUtil ?
-// Change back to Live Data?
+class DetailAdapter(
+    private val onItemLongClick: (Item) -> Boolean
+) : ListAdapter<Item, DetailAdapter.ViewHolder>(DiffCallback) {
 
-class DetailAdapter(private var list: LiveData<MutableList<MutableList<String>>>,
-                    private val detailItemIndex: Int) :
-    RecyclerView.Adapter<DetailAdapter.ViewHolder>() {
+    companion object DiffCallback : DiffUtil.ItemCallback<Item>() {
+        override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return oldItem.itemName == newItem.itemName
+        }
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnLongClickListener{
-
-        override fun onLongClick(p0: View?): Boolean {
-            // Delete DetailList item only
-            return true
+        override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return oldItem == newItem
         }
 
     }
 
+    class ViewHolder(private var binding: ListItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: Item) {
+            binding.listItemText.text = item.itemName.toString()
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
-        return ViewHolder(view)
+        val viewHolder = ViewHolder(
+            ListItemBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
+        viewHolder.itemView.setOnLongClickListener {
+            val position = viewHolder.adapterPosition
+            onItemLongClick(getItem(position))
+        }
+        return viewHolder
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.itemView.list_item_text.text = list.value?.elementAt(detailItemIndex)?.elementAt(position)
+        holder.bind(getItem(position))
     }
-
-    override fun getItemCount(): Int {
-        return list.value?.elementAt(detailItemIndex)?.size ?: 0
-    }
-
 }

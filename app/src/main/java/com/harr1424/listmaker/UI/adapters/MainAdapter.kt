@@ -11,9 +11,9 @@ import com.harr1424.listmaker.databinding.ListItemBinding
 
 class MainAdapter(
     private val onItemClick: (Item) -> Unit, private val onItemLongClick: (Item) -> Boolean
-): ListAdapter<Item, MainAdapter.ViewHolder>(DiffCallback) {
+) : ListAdapter<Item, MainAdapter.ViewHolder>(DiffCallback) {
 
-    companion object DiffCallback: DiffUtil.ItemCallback<Item>() {
+    companion object DiffCallback : DiffUtil.ItemCallback<Item>() {
         override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
             return oldItem.itemName == newItem.itemName
         }
