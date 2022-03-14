@@ -1,1 +1,0 @@
-This project uses the Room library to demonstrate data persistence. 
