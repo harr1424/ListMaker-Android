@@ -10,23 +10,24 @@ import com.harr1424.listmaker.databinding.ListItemBinding
 
 
 class DetailAdapter(
-    private val onItemLongClick: (Item) -> Boolean
-) : ListAdapter<Item, DetailAdapter.ViewHolder>(MainAdapter) {
+    private val onItemLongClick: (String) -> Boolean
+) : ListAdapter<String, DetailAdapter.ViewHolder>(DiffCallback) {
 
-    companion object DiffCallback : DiffUtil.ItemCallback<Item>() {
-        override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
-            return oldItem.itemName == newItem.itemName
-        }
-        override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
+    companion object DiffCallback : DiffUtil.ItemCallback<String>() {
+        override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
             return oldItem == newItem
         }
+
+        override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+            return oldItem == newItem
+        }
+
     }
 
+    // TODO make binding type RecyclerView
     class ViewHolder(private var binding: ListItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Item) {
-            if (item.detailItems.isNotEmpty()) {
-                binding.listItemText.text = item.detailItems[adapterPosition]
-            }
+        fun bind(item: String) {
+            binding.listItemText.text = item
         }
     }
 

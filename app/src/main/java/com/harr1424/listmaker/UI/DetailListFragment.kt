@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.harr1424.listmaker.ListViewModel
@@ -20,6 +22,7 @@ class DetailListFragment : Fragment() {
     private val viewModel: ListViewModel by activityViewModels()
     private var _binding: FragmentDetailListBinding? = null
     private val binding get() = _binding!!
+    private lateinit var adapter: DetailAdapter
     val args: DetailListFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -41,17 +44,23 @@ class DetailListFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         // lambda to define longClick behavior
-        val longClick = { item: Item ->
+        val longClick = { item: String ->
             deleteListItem(item)
         }
-        val adapter = DetailAdapter(longClick)
+        adapter = DetailAdapter(longClick)
         recyclerView.adapter = adapter
-        viewModel.list.observe(this.viewLifecycleOwner) {  items ->
-            items.let {
-                adapter.submitList(it)
-                adapter.notifyDataSetChanged()
-            }
-        }
+
+        val index = viewModel.list.value?.indexOf(args.item)
+        adapter.submitList(viewModel.list.value?.elementAt(index!!)?.detailItems)
+
+
+
+//        viewModel.list.observe(this.viewLifecycleOwner) {  items ->
+//            items.let {
+//                adapter.submitList(it)
+//                adapter.notifyDataSetChanged()
+//            }
+//        }
     }
 
     private fun addListItem(mainItem: Item) {
@@ -70,6 +79,7 @@ class DetailListFragment : Fragment() {
                     val targetItemIndex = viewModel.list.value?.indexOf(mainItem)!!
                     val targetItem = viewModel.list.value?.elementAt(targetItemIndex)!!
                     viewModel.addItemDetailList(targetItem, newDetailString)
+                    adapter.notifyDataSetChanged()
                 }
                 setNegativeButton(
                     "Cancel"
@@ -82,7 +92,7 @@ class DetailListFragment : Fragment() {
         }
     }
 
-    private fun deleteListItem(item: Item): Boolean {
+    private fun deleteListItem(item: String): Boolean {
         activity?.let {
             val builder = AlertDialog.Builder(activity)
             builder.apply {
@@ -90,7 +100,12 @@ class DetailListFragment : Fragment() {
                 setPositiveButton(
                     "Yes"
                 ) { dialog, id ->
-                    viewModel.deleteItemDetailList(args.item, item.toString())
+                    val index = viewModel.list.value?.indexOf(args.item)
+                    if (index != null) {
+                        viewModel.list.value?.elementAt(index)
+                            ?.let { it1 -> viewModel.deleteItemDetailList(it1, item) }
+                    }
+                    adapter.notifyDataSetChanged()
                 }
                 setNegativeButton(
                     "Cancel"
