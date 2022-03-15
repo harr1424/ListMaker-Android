@@ -38,7 +38,7 @@ class DetailListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // Add click listener to floating action button
         binding.fabMain.setOnClickListener {
-            addListItem(args.item)
+            addListItem()
         }
         val recyclerView = binding.detailListView
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -49,12 +49,15 @@ class DetailListFragment : Fragment() {
         }
         adapter = DetailAdapter(longClick)
         recyclerView.adapter = adapter
-
-        val index = viewModel.list.value?.indexOf(args.item)
-        adapter.submitList(viewModel.list.value?.elementAt(index!!)?.detailItems)
+        adapter.submitList(viewModel.list.value?.elementAt(getItemIndex(args.item))?.detailItems)
     }
 
-    private fun addListItem(mainItem: Item) {
+    // Returns the index of the mainItem that was clicked in MainListFragment
+    private fun getItemIndex(item: Item): Int {
+        return viewModel.list.value?.indexOf(item) ?: -1
+    }
+
+    private fun addListItem() {
         val input = EditText(activity)
         input.hint = "Item name"
         input.inputType = InputType.TYPE_CLASS_TEXT
@@ -67,9 +70,8 @@ class DetailListFragment : Fragment() {
                     "Add"
                 ) { dialog, id ->
                     val newDetailString = input.text.toString()
-                    val targetItemIndex = viewModel.list.value?.indexOf(mainItem)!!
-                    val targetItem = viewModel.list.value?.elementAt(targetItemIndex)!!
-                    viewModel.addItemDetailList(targetItem, newDetailString)
+                    viewModel.addItemDetailList(viewModel.list.value?.
+                        elementAt(getItemIndex(args.item))!!, newDetailString)
                     adapter.notifyDataSetChanged()
                 }
                 setNegativeButton(
@@ -87,7 +89,7 @@ class DetailListFragment : Fragment() {
         activity?.let {
             val builder = AlertDialog.Builder(activity)
             builder.apply {
-                setTitle("Delete Item?")
+                setTitle("Delete ${item}?")
                 setPositiveButton(
                     "Yes"
                 ) { dialog, id ->
