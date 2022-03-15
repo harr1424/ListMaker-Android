@@ -52,15 +52,6 @@ class DetailListFragment : Fragment() {
 
         val index = viewModel.list.value?.indexOf(args.item)
         adapter.submitList(viewModel.list.value?.elementAt(index!!)?.detailItems)
-
-
-
-//        viewModel.list.observe(this.viewLifecycleOwner) {  items ->
-//            items.let {
-//                adapter.submitList(it)
-//                adapter.notifyDataSetChanged()
-//            }
-//        }
     }
 
     private fun addListItem(mainItem: Item) {
