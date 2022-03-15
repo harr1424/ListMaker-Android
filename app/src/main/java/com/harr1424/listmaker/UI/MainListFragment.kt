@@ -95,7 +95,7 @@ class MainListFragment : Fragment() {
         activity?.let {
             val builder = AlertDialog.Builder(activity)
             builder.apply {
-                setTitle("Delete Item?")
+                setTitle("Delete ${item.itemName}?")
                 setPositiveButton(
                     "Yes"
                 ) { dialog, id ->
