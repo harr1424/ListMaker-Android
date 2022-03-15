@@ -56,6 +56,8 @@ class DetailListFragment : Fragment() {
     private fun getItemIndex(item: Item): Int {
         return viewModel.list.value?.indexOf(item) ?: -1
     }
+        adapter.submitList(viewModel.list.value?.elementAt(getItemIndex(args.item))?.detailItems)
+    }
 
     private fun addListItem() {
         val input = EditText(activity)
