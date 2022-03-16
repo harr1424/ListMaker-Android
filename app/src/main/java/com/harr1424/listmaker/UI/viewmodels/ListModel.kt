@@ -57,6 +57,22 @@ class ListViewModel(
         }
     }
 
+    // create a view model factory that takes a MainItemDao and DetailItemDao as properties  and
+    //  creates a ForageableViewModel
+    class ListViewModelFactory(
+        private val mainItemDao: MainItemDao,
+        private val detailItemDao: DetailItemDao
+        ):
+        ViewModelProvider.Factory{
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(ListViewModel::class.java)) {
+                return ListViewModel(mainItemDao, detailItemDao) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
+        }
+
+    }
+
     // Update functions currently unused, consider adding an edit functionality, especially for
     // MainItems
 

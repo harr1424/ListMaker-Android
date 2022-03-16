@@ -37,6 +37,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
 }
 
 dependencies {
@@ -81,3 +82,10 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
 }
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class).configureEach {
+    kotlinOptions {
+        freeCompilerArgs = freeCompilerArgs + "-Xjvm-default=all"
+    }
+}
+
