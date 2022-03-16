@@ -1,48 +1,64 @@
 package com.harr1424.listmaker
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.harr1424.listmaker.data.Item
+import androidx.lifecycle.*
+import com.harr1424.listmaker.data.DetailItem
+import com.harr1424.listmaker.data.DetailItemDao
+import com.harr1424.listmaker.data.MainItem
+import com.harr1424.listmaker.data.MainItemDao
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.lang.IllegalArgumentException
 
 
-class ListViewModel : ViewModel() {
-    private val _list = MutableLiveData<MutableList<Item>>()
-    val list: LiveData<MutableList<Item>> = _list
+class ListViewModel(
+    private val mainItemDao: MainItemDao,
+    private val detailItemDao: DetailItemDao
+): ViewModel() {
 
-    init {
-        _list.value = arrayListOf()
+    val allMainItems: LiveData<List<MainItem>> = mainItemDao.getAll().asLiveData()
+    val allDetailItems: LiveData<List<DetailItem>> = detailItemDao.getAll().asLiveData()
+
+    fun getMainItem(id: Int) : LiveData<MainItem> {
+        return mainItemDao.getById(id).asLiveData()
     }
 
-    fun addItemMainList(item: Item) {
-        if (_list.value?.contains(item) == false) {
-            _list.value?.add(item)
-            _list.value = _list.value
-        }
-        Log.d("AddItem", list.value.toString())
-
+    fun getDetailItems(mainItemId: Int) : LiveData<List<DetailItem>> {
+        return detailItemDao.getDetailFromMain(mainItemId).asLiveData()
     }
 
-    fun deleteItemMainList(item: Item) {
-        if (_list.value?.contains(item) == true) {
-            _list.value?.remove(item)
-            _list.value = _list.value
-        }
-    }
-
-    fun addItemDetailList(mainItem: Item, detailItem: String) {
-        val targetItem = list.value?.indexOf(mainItem)
-        if (targetItem != null) {
-            _list.value?.elementAt(targetItem)?.detailItems?.add(detailItem)
-        }
-        Log.d("DetailListAddItem", list.value.toString())
-    }
-
-    fun deleteItemDetailList(mainItem: Item, detailItem: String) {
-        val targetItem = list.value?.indexOf(mainItem)
-        if (targetItem != null) {
-            _list.value?.elementAt(targetItem)?.detailItems?.remove(detailItem)
+    fun addMainItem(mainItem: MainItem) {
+        // launch a coroutine and call the DAO method to add a MainItem to the database
+        viewModelScope.launch(Dispatchers.IO) {
+            mainItemDao.insert(mainItem)
         }
     }
+
+    fun addDetailItem(mainItemId: Int, detailItemName: String) {
+        val detailItem = DetailItem(mainItemId = mainItemId, detailItemName = detailItemName)
+
+        // launch a coroutine and call the DAO method to add a DetailItem to the database
+        viewModelScope.launch(Dispatchers.IO) {
+            detailItemDao.insert(detailItem)
+        }
+    }
+
+    fun deleteMainItem(mainItem: MainItem) {
+        // call the DAO method to delete a forageable to the database here
+        viewModelScope.launch(Dispatchers.IO) {
+            mainItemDao.delete(mainItem)
+        }
+    }
+
+    fun deleteDetailItem(detailItem: DetailItem) {
+        // call the DAO method to delete a forageable to the database here
+        viewModelScope.launch(Dispatchers.IO) {
+            detailItemDao.delete(detailItem)
+        }
+    }
+
+    // Update functions currently unused, consider adding an edit functionality, especially for
+    // MainItems
+
+    // FindByName functions currently unused, consider adding search functionality
 }

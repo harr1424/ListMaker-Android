@@ -9,13 +9,11 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.harr1424.listmaker.ListViewModel
 import com.harr1424.listmaker.UI.adapters.DetailAdapter
-import com.harr1424.listmaker.data.Item
+import com.harr1424.listmaker.data.DetailItem
 import com.harr1424.listmaker.databinding.FragmentDetailListBinding
 
 class DetailListFragment : Fragment() {
@@ -44,17 +42,17 @@ class DetailListFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         // lambda to define longClick behavior
-        val longClick = { item: String ->
-            deleteListItem(item)
+        val longClick = { detailItem: DetailItem ->
+            deleteListItem(detailItem)
         }
         adapter = DetailAdapter(longClick)
         recyclerView.adapter = adapter
-        adapter.submitList(viewModel.list.value?.elementAt(getItemIndex(args.item))?.detailItems)
-    }
-
-    // Returns the index of the mainItem that was clicked in MainListFragment
-    private fun getItemIndex(item: Item): Int {
-        return viewModel.list.value?.indexOf(item) ?: -1
+        viewModel.allDetailItems.observe(this.viewLifecycleOwner) { items ->
+            items.let {
+                adapter.submitList(it)
+                adapter.notifyDataSetChanged()
+            }
+        }
     }
 
     private fun addListItem() {
@@ -69,10 +67,7 @@ class DetailListFragment : Fragment() {
                 setPositiveButton(
                     "Add"
                 ) { dialog, id ->
-                    val newDetailString = input.text.toString()
-                    viewModel.addItemDetailList(viewModel.list.value?.
-                        elementAt(getItemIndex(args.item))!!, newDetailString)
-                    adapter.notifyDataSetChanged()
+                    viewModel.addDetailItem(args.mainItemId, input.text.toString())
                 }
                 setNegativeButton(
                     "Cancel"
@@ -85,20 +80,15 @@ class DetailListFragment : Fragment() {
         }
     }
 
-    private fun deleteListItem(item: String): Boolean {
+    private fun deleteListItem(detailItem: DetailItem): Boolean {
         activity?.let {
             val builder = AlertDialog.Builder(activity)
             builder.apply {
-                setTitle("Delete ${item}?")
+                setTitle("Delete ${detailItem.detailItemName}?")
                 setPositiveButton(
                     "Yes"
                 ) { dialog, id ->
-                    val index = viewModel.list.value?.indexOf(args.item)
-                    if (index != null) {
-                        viewModel.list.value?.elementAt(index)
-                            ?.let { it1 -> viewModel.deleteItemDetailList(it1, item) }
-                    }
-                    adapter.notifyDataSetChanged()
+                    viewModel.deleteDetailItem(detailItem)
                 }
                 setNegativeButton(
                     "Cancel"

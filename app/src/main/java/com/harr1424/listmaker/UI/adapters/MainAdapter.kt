@@ -5,27 +5,27 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.harr1424.listmaker.data.Item
+import com.harr1424.listmaker.data.MainItem
 import com.harr1424.listmaker.databinding.ListItemBinding
 
 
 class MainAdapter(
-    private val onItemClick: (Item) -> Unit, private val onItemLongClick: (Item) -> Boolean
-) : ListAdapter<Item, MainAdapter.ViewHolder>(DiffCallback) {
+    private val onItemClick: (MainItem) -> Unit, private val onItemLongClick: (MainItem) -> Boolean
+) : ListAdapter<MainItem, MainAdapter.ViewHolder>(DiffCallback) {
 
-    companion object DiffCallback : DiffUtil.ItemCallback<Item>() {
-        override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
+    companion object DiffCallback : DiffUtil.ItemCallback<MainItem>() {
+        override fun areItemsTheSame(oldItem: MainItem, newItem: MainItem): Boolean {
             return oldItem.itemName == newItem.itemName
         }
 
-        override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
+        override fun areContentsTheSame(oldItem: MainItem, newItem: MainItem): Boolean {
             return oldItem == newItem
         }
 
     }
 
     class ViewHolder(private var binding: ListItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Item) {
+        fun bind(item: MainItem) {
             binding.listItemText.text = item.itemName.toString()
         }
     }
