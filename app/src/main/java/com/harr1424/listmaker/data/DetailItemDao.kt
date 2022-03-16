@@ -17,7 +17,7 @@ interface DetailItemDao {
     @Query("SELECT * FROM DetailItem " +
             "INNER JOIN MainItem ON MainItem.id = DetailItem.main_item_id " +
             "WHERE DetailItem.main_item_id = :mainItemId ")
-            fun getDetailFromMain(mainItemId: Int) : Flow<List<DetailItem>>
+    fun getDetailFromMain(mainItemId: Int) : Flow<List<DetailItem>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(item: DetailItem)

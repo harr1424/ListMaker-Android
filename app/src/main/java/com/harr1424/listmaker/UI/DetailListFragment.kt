@@ -53,7 +53,7 @@ class DetailListFragment : Fragment() {
         }
         adapter = DetailAdapter(longClick)
         recyclerView.adapter = adapter
-        viewModel.allDetailItems.observe(this.viewLifecycleOwner) { items ->
+        viewModel.getDetailItems(args.mainItemId).observe(this.viewLifecycleOwner) { items ->
             items.let {
                 adapter.submitList(it)
                 adapter.notifyDataSetChanged()
