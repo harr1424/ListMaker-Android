@@ -17,11 +17,14 @@
     <fragment
         android:id="@+id/detailListFragment"
         android:name="com.harr1424.listmaker.UI.DetailListFragment"
-        android:label="{itemName}"
+        android:label="{mainItemName}"
         tools:layout="@layout/fragment_detail_list" >
         <argument
             android:name="mainItemId"
             app:argType="integer"/>
+        <argument
+            android:name="mainItemName"
+            app:argType="string"/>
         <action
             android:id="@+id/action_detailListFragment_to_mainListFragment"
             app:destination="@id/mainListFragment" />

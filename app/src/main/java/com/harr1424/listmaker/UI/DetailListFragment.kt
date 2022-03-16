@@ -11,13 +11,19 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.harr1424.listmaker.BaseApplication
 import com.harr1424.listmaker.ListViewModel
 import com.harr1424.listmaker.UI.adapters.DetailAdapter
 import com.harr1424.listmaker.data.DetailItem
 import com.harr1424.listmaker.databinding.FragmentDetailListBinding
 
 class DetailListFragment : Fragment() {
-    private val viewModel: ListViewModel by activityViewModels()
+    private val viewModel: ListViewModel by activityViewModels() {
+        ListViewModel.ListViewModelFactory(
+            (activity?.application as BaseApplication).database.mainItemDao(),
+            (activity?.application as BaseApplication).database.detailItemDao(),
+            )
+    }
     private var _binding: FragmentDetailListBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter: DetailAdapter

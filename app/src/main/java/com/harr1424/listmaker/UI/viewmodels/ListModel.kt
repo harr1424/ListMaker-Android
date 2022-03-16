@@ -15,7 +15,6 @@ class ListViewModel(
     private val mainItemDao: MainItemDao,
     private val detailItemDao: DetailItemDao
 ): ViewModel() {
-
     val allMainItems: LiveData<List<MainItem>> = mainItemDao.getAll().asLiveData()
     val allDetailItems: LiveData<List<DetailItem>> = detailItemDao.getAll().asLiveData()
 

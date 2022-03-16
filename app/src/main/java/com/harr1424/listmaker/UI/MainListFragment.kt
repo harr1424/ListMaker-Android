@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.harr1424.listmaker.BaseApplication
 import com.harr1424.listmaker.ListViewModel
 import com.harr1424.listmaker.UI.adapters.MainAdapter
 import com.harr1424.listmaker.data.MainItem
@@ -18,7 +19,12 @@ import com.harr1424.listmaker.databinding.FragmentMainListBinding
 
 
 class MainListFragment : Fragment() {
-    private val viewModel: ListViewModel by activityViewModels()
+    private val viewModel: ListViewModel by activityViewModels() {
+        ListViewModel.ListViewModelFactory(
+            (activity?.application as BaseApplication).database.mainItemDao(),
+            (activity?.application as BaseApplication).database.detailItemDao(),
+        )
+    }
     private var _binding: FragmentMainListBinding? = null
     private val binding get() = _binding!!
 
@@ -44,7 +50,7 @@ class MainListFragment : Fragment() {
         // navigate to appropriate detail list
         val click = { mainItem: MainItem ->
             val action =
-                MainListFragmentDirections.actionMainListFragmentToDetailListFragment(mainItem.id)
+                MainListFragmentDirections.actionMainListFragmentToDetailListFragment(mainItem.id, mainItem.itemName!!)
             findNavController().navigate(action)
         }
 
