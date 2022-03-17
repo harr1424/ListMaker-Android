@@ -17,6 +17,9 @@ interface MainItemDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(item: MainItem)
 
+    @Query(" DELETE FROM detailitem where main_item_id = :mainItemId")
+    fun deleteDetailsFromMain(mainItemId: Int)
+
     @Delete
     fun delete(item: MainItem)
 

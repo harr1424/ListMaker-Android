@@ -56,6 +56,13 @@ class ListViewModel(
         }
     }
 
+    fun deleteDetailsFromMain(mainItemId: Int) {
+        // call the DAO method to delete a forageable to the database here
+        viewModelScope.launch(Dispatchers.IO) {
+            mainItemDao.deleteDetailsFromMain(mainItemId)
+        }
+
+    }
     // create a view model factory that takes a MainItemDao and DetailItemDao as properties  and
     //  creates a ForageableViewModel
     class ListViewModelFactory(

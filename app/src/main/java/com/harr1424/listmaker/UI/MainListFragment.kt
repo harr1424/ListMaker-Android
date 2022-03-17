@@ -106,6 +106,7 @@ class MainListFragment : Fragment() {
                     "Yes"
                 ) { dialog, id ->
                     viewModel.deleteMainItem(item)
+                    viewModel.deleteDetailsFromMain(item.id)
                 }
                 setNegativeButton(
                     "Cancel"

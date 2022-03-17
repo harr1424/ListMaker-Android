@@ -3,6 +3,7 @@ package com.harr1424.listmaker.UI
 import android.app.AlertDialog
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -95,6 +96,7 @@ class DetailListFragment : Fragment() {
                     "Yes"
                 ) { dialog, id ->
                     viewModel.deleteDetailItem(detailItem)
+                    Log.d("deletion", "id was ${detailItem}")
                 }
                 setNegativeButton(
                     "Cancel"
