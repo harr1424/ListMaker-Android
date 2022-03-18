@@ -11,14 +11,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.harr1424.listmaker.BaseApplication
 import com.harr1424.listmaker.ListViewModel
 import com.harr1424.listmaker.UI.adapters.MainAdapter
-import com.harr1424.listmaker.data.Item
+import com.harr1424.listmaker.data.MainItem
 import com.harr1424.listmaker.databinding.FragmentMainListBinding
 
 
 class MainListFragment : Fragment() {
-    private val viewModel: ListViewModel by activityViewModels()
+    private val viewModel: ListViewModel by activityViewModels() {
+        ListViewModel.ListViewModelFactory(
+            (activity?.application as BaseApplication).database.mainItemDao(),
+            (activity?.application as BaseApplication).database.detailItemDao(),
+        )
+    }
     private var _binding: FragmentMainListBinding? = null
     private val binding get() = _binding!!
 
@@ -42,22 +48,22 @@ class MainListFragment : Fragment() {
 
         // lambda for click behavior
         // navigate to appropriate detail list
-        val click = { item: Item ->
+        val click = { mainItem: MainItem ->
             val action =
-                MainListFragmentDirections.actionMainListFragmentToDetailListFragment(item, item.itemName)
+                MainListFragmentDirections.actionMainListFragmentToDetailListFragment(mainItem.id, mainItem.itemName!!)
             findNavController().navigate(action)
         }
 
         // lambda for long click behavior
         // delete longclicked item
-        val longClick = { item: Item ->
+        val longClick = { item: MainItem ->
             deleteListItem(item)
         }
 
         // MainAdapter takes params onClickListener and onLongClickListener
         val adapter = MainAdapter(click, longClick)
         recyclerView.adapter = adapter
-        viewModel.list.observe(this.viewLifecycleOwner) { items ->
+        viewModel.allMainItems.observe(this.viewLifecycleOwner) { items ->
             items.let {
                 adapter.submitList(it)
                 adapter.notifyDataSetChanged()
@@ -77,8 +83,8 @@ class MainListFragment : Fragment() {
                 setPositiveButton(
                     "Add"
                 ) { dialog, id ->
-                    val newItem = Item(input.text.toString(), mutableListOf())
-                    viewModel.addItemMainList(newItem)
+                    val newItem = MainItem(itemName = input.text.toString())
+                    viewModel.addMainItem(newItem)
                 }
                 setNegativeButton(
                     "Cancel"
@@ -91,7 +97,7 @@ class MainListFragment : Fragment() {
         }
     }
 
-    private fun deleteListItem(item: Item): Boolean {
+    private fun deleteListItem(item: MainItem): Boolean {
         activity?.let {
             val builder = AlertDialog.Builder(activity)
             builder.apply {
@@ -99,7 +105,8 @@ class MainListFragment : Fragment() {
                 setPositiveButton(
                     "Yes"
                 ) { dialog, id ->
-                    viewModel.deleteItemMainList(item)
+                    viewModel.deleteMainItem(item)
+                    viewModel.deleteDetailsFromMain(item.id)
                 }
                 setNegativeButton(
                     "Cancel"
