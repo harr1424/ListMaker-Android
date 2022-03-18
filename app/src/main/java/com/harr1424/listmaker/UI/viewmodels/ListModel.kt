@@ -79,8 +79,6 @@ class ListViewModel(
 
     }
 
-    // Update functions currently unused, consider adding an edit functionality, especially for
-    // MainItems
 
     // FindByName functions currently unused, consider adding search functionality
 }

@@ -5,11 +5,8 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DetailItemDao {
-    @Query("SELECT * FROM DetailItem")
+    @Query("SELECT * FROM DetailItem ORDER BY detail_item_name ASC")
     fun getAll(): Flow<List<DetailItem>>
-
-    @Query("SELECT * FROM DetailItem WHERE id = :itemId")
-    fun getById(itemId: Int): Flow<DetailItem>
 
     @Query("SELECT * FROM DetailItem WHERE detail_item_name LIKE :name")
     fun findByName(name: String): Flow<List<DetailItem>>

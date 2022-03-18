@@ -1,5 +1,6 @@
 package com.harr1424.listmaker.data
 
+import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -11,10 +12,8 @@ data class MainItem(
     @ColumnInfo(name = "item_name") val itemName: String?
 )
 
-@Entity
+@Entity(primaryKeys = ["main_item_id", "detail_item_name"])
 data class DetailItem(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-    @ColumnInfo(name = "main_item_id") val mainItemId: Int,
-    @ColumnInfo(name = "detail_item_name") val detailItemName: String?
+    @NonNull @ColumnInfo(name = "main_item_id") val mainItemId: Int,
+    @NonNull @ColumnInfo(name = "detail_item_name") val detailItemName: String
 )
