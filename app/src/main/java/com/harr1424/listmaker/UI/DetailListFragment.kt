@@ -13,13 +13,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.harr1424.listmaker.BaseApplication
-import com.harr1424.listmaker.ListViewModel
+import com.harr1424.listmaker.UI.viewmodels.ListViewModel
 import com.harr1424.listmaker.UI.adapters.DetailAdapter
-import com.harr1424.listmaker.data.DetailItem
+import com.harr1424.listmaker.model.DetailItem
 import com.harr1424.listmaker.databinding.FragmentDetailListBinding
 
 class DetailListFragment : Fragment() {
-    private val viewModel: ListViewModel by activityViewModels() {
+    private val viewModel: ListViewModel by activityViewModels {
         ListViewModel.ListViewModelFactory(
             (activity?.application as BaseApplication).database.mainItemDao(),
             (activity?.application as BaseApplication).database.detailItemDao(),
@@ -28,15 +28,14 @@ class DetailListFragment : Fragment() {
     private var _binding: FragmentDetailListBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter: DetailAdapter
-    val args: DetailListFragmentArgs by navArgs()
+    private val args: DetailListFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentDetailListBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-        return root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -73,12 +72,12 @@ class DetailListFragment : Fragment() {
                 setView(input)
                 setPositiveButton(
                     "Add"
-                ) { dialog, id ->
+                ) { _, _ ->
                     viewModel.addDetailItem(args.mainItemId, input.text.toString())
                 }
                 setNegativeButton(
                     "Cancel"
-                ) { dialog, id ->
+                ) { dialog, _ ->
                     dialog.cancel()
                 }
             }
@@ -94,13 +93,13 @@ class DetailListFragment : Fragment() {
                 setTitle("Delete ${detailItem.detailItemName}?")
                 setPositiveButton(
                     "Yes"
-                ) { dialog, id ->
+                ) { _, _ ->
                     viewModel.deleteDetailItem(detailItem)
-                    Log.d("deletion", "id was ${detailItem}")
+                    Log.d("deletion", "id was $detailItem")
                 }
                 setNegativeButton(
                     "Cancel"
-                ) { dialog, id ->
+                ) { dialog, _ ->
                     dialog.cancel()
                 }
             }

@@ -1,6 +1,7 @@
 package com.harr1424.listmaker.data
 
 import androidx.room.*
+import com.harr1424.listmaker.model.MainItem
 import kotlinx.coroutines.flow.Flow
 
 @Dao

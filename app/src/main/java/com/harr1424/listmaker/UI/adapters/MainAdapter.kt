@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.harr1424.listmaker.data.MainItem
+import com.harr1424.listmaker.model.MainItem
 import com.harr1424.listmaker.databinding.ListItemBinding
 
 

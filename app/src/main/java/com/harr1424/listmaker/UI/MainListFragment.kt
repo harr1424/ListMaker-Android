@@ -12,14 +12,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.harr1424.listmaker.BaseApplication
-import com.harr1424.listmaker.ListViewModel
+import com.harr1424.listmaker.UI.viewmodels.ListViewModel
 import com.harr1424.listmaker.UI.adapters.MainAdapter
-import com.harr1424.listmaker.data.MainItem
+import com.harr1424.listmaker.model.MainItem
 import com.harr1424.listmaker.databinding.FragmentMainListBinding
 
 
 class MainListFragment : Fragment() {
-    private val viewModel: ListViewModel by activityViewModels() {
+    private val viewModel: ListViewModel by activityViewModels {
         ListViewModel.ListViewModelFactory(
             (activity?.application as BaseApplication).database.mainItemDao(),
             (activity?.application as BaseApplication).database.detailItemDao(),
@@ -33,8 +33,7 @@ class MainListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMainListBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-        return root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -82,13 +81,13 @@ class MainListFragment : Fragment() {
                 setView(input)
                 setPositiveButton(
                     "Add"
-                ) { dialog, id ->
+                ) { _, _ ->
                     val newItem = MainItem(itemName = input.text.toString())
                     viewModel.addMainItem(newItem)
                 }
                 setNegativeButton(
                     "Cancel"
-                ) { dialog, id ->
+                ) { dialog, _ ->
                     dialog.cancel()
                 }
             }
@@ -104,13 +103,13 @@ class MainListFragment : Fragment() {
                 setTitle("Delete ${item.itemName}?")
                 setPositiveButton(
                     "Yes"
-                ) { dialog, id ->
+                ) { _, _ ->
                     viewModel.deleteMainItem(item)
                     viewModel.deleteDetailsFromMain(item.id)
                 }
                 setNegativeButton(
                     "Cancel"
-                ) { dialog, id ->
+                ) { dialog, _ ->
                     dialog.cancel()
                 }
             }

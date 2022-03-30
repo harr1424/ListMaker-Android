@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.harr1424.listmaker.model.DetailItem
+import com.harr1424.listmaker.model.MainItem
 
 @Database(entities = [MainItem::class, DetailItem::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
@@ -11,9 +13,9 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun detailItemDao(): DetailItemDao
     companion object {
         @Volatile
-        private var INSANCE: AppDatabase? = null
+        private var INSTANCE: AppDatabase? = null
         fun getDatabase(context: Context): AppDatabase{
-            return INSANCE ?: synchronized(this) {
+            return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
@@ -21,7 +23,7 @@ abstract class AppDatabase : RoomDatabase() {
                 )
                     .fallbackToDestructiveMigration()
                     .build()
-                INSANCE = instance
+                INSTANCE = instance
                 return instance
             }
         }

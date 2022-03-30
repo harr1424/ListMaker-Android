@@ -1,4 +1,4 @@
-package com.harr1424.listmaker.data
+package com.harr1424.listmaker.model
 
 import androidx.annotation.NonNull
 import androidx.room.ColumnInfo

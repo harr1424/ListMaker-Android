@@ -1,10 +1,9 @@
-package com.harr1424.listmaker
+package com.harr1424.listmaker.UI.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.*
-import com.harr1424.listmaker.data.DetailItem
+import com.harr1424.listmaker.model.DetailItem
 import com.harr1424.listmaker.data.DetailItemDao
-import com.harr1424.listmaker.data.MainItem
+import com.harr1424.listmaker.model.MainItem
 import com.harr1424.listmaker.data.MainItemDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,11 +15,6 @@ class ListViewModel(
     private val detailItemDao: DetailItemDao
 ): ViewModel() {
     val allMainItems: LiveData<List<MainItem>> = mainItemDao.getAll().asLiveData()
-    val allDetailItems: LiveData<List<DetailItem>> = detailItemDao.getAll().asLiveData()
-
-    fun getMainItem(id: Int) : LiveData<MainItem> {
-        return mainItemDao.getById(id).asLiveData()
-    }
 
     fun getDetailItems(mainItemId: Int) : LiveData<List<DetailItem>> {
         return detailItemDao.getDetailFromMain(mainItemId).asLiveData()
@@ -43,28 +37,28 @@ class ListViewModel(
     }
 
     fun deleteMainItem(mainItem: MainItem) {
-        // call the DAO method to delete a forageable to the database here
+        // call the DAO method to delete an item to the database here
         viewModelScope.launch(Dispatchers.IO) {
             mainItemDao.delete(mainItem)
         }
     }
 
     fun deleteDetailItem(detailItem: DetailItem) {
-        // call the DAO method to delete a forageable to the database here
+        // call the DAO method to delete an item to the database here
         viewModelScope.launch(Dispatchers.IO) {
             detailItemDao.delete(detailItem)
         }
     }
 
     fun deleteDetailsFromMain(mainItemId: Int) {
-        // call the DAO method to delete a forageable to the database here
+        // call the DAO method to delete an item to the database here
         viewModelScope.launch(Dispatchers.IO) {
             mainItemDao.deleteDetailsFromMain(mainItemId)
         }
 
     }
     // create a view model factory that takes a MainItemDao and DetailItemDao as properties  and
-    //  creates a ForageableViewModel
+    //  creates a ViewModel
     class ListViewModelFactory(
         private val mainItemDao: MainItemDao,
         private val detailItemDao: DetailItemDao
