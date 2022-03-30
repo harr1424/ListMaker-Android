@@ -1,5 +1,5 @@
 # ListMaker
-Android app demonstrating the use of a ViewModel to store LiveData displayed using a RecyclerView
+Android app demonstrating the use of a ViewModel and the Room library to store LiveData displayed using a RecyclerView
 
 ## Privacy Policy
 This application does not collect, store, or transmit any user data. 
