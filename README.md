@@ -1,5 +1,5 @@
 # ListMaker
-Android app demonstrating the use of a ViewModel and the Room library to store LiveData displayed using a RecyclerView
+Android app allowing users to create a list of items (tasks, things to read, projects, etc.) CLicking on an item in the main list will display a sub-list where a user can define sub-tasks or action items related to the parent list item. Long clicking an item will remove that item from a list. A simple and straightforward way of organizing your TODO items. 
 
 ## Privacy Policy
 This application does not collect, store, or transmit any user data. 
