@@ -1,0 +1,1 @@
+Manage multiple areas of your life with ease. ListMaker allows you to create a main list of categories which can each contain child  lists of TODO items. Perfect for grocery, shopping, travel, and any other lists you can imagine.
