@@ -18,7 +18,7 @@ This application does not collect, store, or transmit any user data.
 <a href="https://f-droid.org/packages/com.harr1424.listmaker/">
     <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
     alt="Get it on F-Droid"
-    height="80">
+    height="100">
 </a>
 
 
