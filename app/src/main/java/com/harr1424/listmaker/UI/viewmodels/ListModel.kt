@@ -7,6 +7,7 @@ import com.harr1424.listmaker.model.MainItem
 import com.harr1424.listmaker.data.MainItemDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.newCoroutineContext
 import java.lang.IllegalArgumentException
 
 
@@ -50,13 +51,27 @@ class ListViewModel(
         }
     }
 
+    fun renameMainItem(mainItem: MainItem, newName: String) {
+        // call the DAO method to update mainItem name
+        viewModelScope.launch(Dispatchers.IO) {
+            mainItemDao.update(mainItem.id, newName)
+        }
+    }
+
+    fun renameDetailItem(detailItem: DetailItem, newName: String) {
+        // call the DAO method to update detailItem name
+        viewModelScope.launch(Dispatchers.IO) {
+            detailItemDao.update(detailItem.mainItemId, detailItem.detailItemName, newName)
+        }
+    }
+
     fun deleteDetailsFromMain(mainItemId: Int) {
         // call the DAO method to delete an item to the database here
         viewModelScope.launch(Dispatchers.IO) {
             mainItemDao.deleteDetailsFromMain(mainItemId)
         }
-
     }
+
     // create a view model factory that takes a MainItemDao and DetailItemDao as properties  and
     //  creates a ViewModel
     class ListViewModelFactory(
@@ -70,9 +85,5 @@ class ListViewModel(
             }
             throw IllegalArgumentException("Unknown ViewModel class")
         }
-
     }
-
-
-    // FindByName functions currently unused, consider adding search functionality
 }

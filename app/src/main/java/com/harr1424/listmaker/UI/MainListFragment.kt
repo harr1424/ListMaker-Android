@@ -7,15 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.harr1424.listmaker.BaseApplication
-import com.harr1424.listmaker.UI.viewmodels.ListViewModel
 import com.harr1424.listmaker.UI.adapters.MainAdapter
-import com.harr1424.listmaker.model.MainItem
+import com.harr1424.listmaker.UI.viewmodels.ListViewModel
 import com.harr1424.listmaker.databinding.FragmentMainListBinding
+import com.harr1424.listmaker.model.MainItem
 
 
 class MainListFragment : Fragment() {
@@ -54,9 +55,9 @@ class MainListFragment : Fragment() {
         }
 
         // lambda for long click behavior
-        // delete longclicked item
+        // rename or delete item
         val longClick = { item: MainItem ->
-            deleteListItem(item)
+            renameOrDeleteMainItem(item)
         }
 
         // MainAdapter takes params onClickListener and onLongClickListener
@@ -73,7 +74,7 @@ class MainListFragment : Fragment() {
     private fun addListItem() {
         val input = EditText(activity)
         input.hint = "Item name"
-        input.inputType = InputType.TYPE_CLASS_TEXT
+        input.inputType = InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
         activity?.let {
             val builder = AlertDialog.Builder(activity)
             builder.apply {
@@ -84,6 +85,51 @@ class MainListFragment : Fragment() {
                 ) { _, _ ->
                     val newItem = MainItem(itemName = input.text.toString())
                     viewModel.addMainItem(newItem)
+                }
+                setNegativeButton(
+                    "Cancel"
+                ) { dialog, _ ->
+                    dialog.cancel()
+                }
+            }
+            builder.create()
+            builder.show()
+        }
+    }
+
+    private fun renameOrDeleteMainItem(item: MainItem) : Boolean{
+        activity?.let {
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle("Edit or Delete Item")
+            builder.setItems(
+                arrayOf<CharSequence>("Edit", "Delete", "Cancel")
+            ) { dialog, which -> // The 'which' argument contains the index position
+                // of the selected item
+                when (which) {
+                    0 -> renameMainItem(item)
+                    1 -> deleteListItem(item)
+                    2 -> dialog.cancel()
+                }
+            }
+            builder.create().show()
+        }
+        return true
+    }
+
+    private fun renameMainItem(item: MainItem) {
+        val input = EditText(activity)
+        input.hint = "New Item Name"
+        input.inputType = InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+        activity?.let {
+            val builder = AlertDialog.Builder(activity)
+            builder.apply {
+                setTitle("Rename Item")
+                setView(input)
+                setPositiveButton(
+                    "Rename"
+                ) { _, _ ->
+                    val newName = input.text.toString()
+                    viewModel.renameMainItem(item, newName)
                 }
                 setNegativeButton(
                     "Cancel"
