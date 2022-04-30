@@ -8,7 +8,5 @@ import com.harr1424.listmaker.data.AppDatabase
  * instance of the AppDatabase
  */
 class BaseApplication : Application() {
-
-    // provide a ForageDatabase value by lazy here
     val database: AppDatabase by lazy { AppDatabase.getDatabase(this) }
 }

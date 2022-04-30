@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         if (!welcomeShown) {
             val title = "Welcome!"
             val instructions = "Add a new item by clicking the add button at the bottom of the " +
-                    "screen.\n\nDelete item(s) by clicking and holding them."
+                    "screen.\n\nRename or delete an item by long-clicking it."
             AlertDialog.Builder(this)
                 .setTitle(title)
                 .setMessage(instructions)

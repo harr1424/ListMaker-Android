@@ -23,7 +23,6 @@ class DetailAdapter(
         }
     }
 
-    // TODO make binding type RecyclerView
     class ViewHolder(private var binding: ListItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: DetailItem) {
             binding.listItemText.text = item.detailItemName

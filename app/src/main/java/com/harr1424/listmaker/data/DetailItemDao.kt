@@ -23,6 +23,7 @@ interface DetailItemDao {
     @Delete
     fun delete(item: DetailItem)
 
-    @Update
-    fun update(item: DetailItem)
+    @Query("UPDATE DetailItem SET detail_item_name = :name WHERE " +
+            "main_item_id = :mainItemId AND detail_item_name = :detailItemName ")
+    fun update(mainItemId: Int, detailItemName: String, name: String)
 }

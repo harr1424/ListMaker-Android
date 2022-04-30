@@ -24,6 +24,6 @@ interface MainItemDao {
     @Delete
     fun delete(item: MainItem)
 
-    @Update
-    fun update(item: MainItem)
+    @Query("UPDATE MainItem SET item_name = :name WHERE id = :itemId")
+    fun update(itemId: Int, name: String)
 }
